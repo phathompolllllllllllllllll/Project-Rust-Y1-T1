@@ -48,7 +48,22 @@ fn generate_random_colors(n: usize) -> Vec<RGBColor> {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
 
-    let data = read_csv_into_list("data.csv")?;
+    let agrs: Vec<String> = std::env::args().collect();
+
+    if agrs.len() == 2 {
+        println!("Please put another file name to read");
+    }
+    
+    else if agrs.len() < 3 {
+        println!("You are not put the two file names to read");
+
+    } else {
+        let arg_1 = &agrs[1];
+        let arg_2 = &agrs[2];
+
+   
+
+    let data = read_csv_into_list(arg_1)?;
     let max_value = *data.iter().max().unwrap_or(&0);
     let max_frequency = data.iter().filter(|&&x| x == max_value).count() as u32;
 
@@ -82,7 +97,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("Result has been saved to {}", OUT_FILE_NAME);
 
 
-    let file_path = "sctter.csv";
+    let file_path = arg_2;
     let file = File::open(file_path)?;
     let mut rdr = csv::Reader::from_reader(file);
     let mut age_data = Vec::new();
@@ -151,8 +166,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     }
 
 
-let mut unique_list: Vec<u32> = Vec::new();
-let mut set: HashSet<u32> = HashSet::new();
+    let mut unique_list: Vec<u32> = Vec::new();
+    let mut set: HashSet<u32> = HashSet::new();
 
     for &num in &data {
         if set.insert(num) {
@@ -185,10 +200,13 @@ let mut set: HashSet<u32> = HashSet::new();
     pie.percentages((("sans-serif", 20).into_font()).color(&BLACK));
     root_area.draw(&pie)?;
     println!("Pie chart created and saved as 'pie-chart.png'");
+    }
 
     Ok(())
     
 }
+
+
 
 #[test]
 fn entry_point() {
